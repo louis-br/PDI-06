@@ -1,14 +1,14 @@
 import numpy as np
 import cv2
 from time import sleep
-from car_counters import CentroidCarCounter, LineCarCounter
+from car_counters import TrackingCarCounter, LineCarCounter
 
-COUNTER = CentroidCarCounter
+COUNTER = LineCarCounter
 FILENAME = 'videos/rodovia2'
 FILE = f'{FILENAME}.mp4'
 ROI = f'{FILENAME}_roi.json'
 THRESH = 32
-MHI_DURATION = 8
+MHI_DURATION = 5
 
 
 def mhi():

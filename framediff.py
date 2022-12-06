@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-from car_counters import CentroidCarCounter, LineCarCounter
+from car_counters import TrackingCarCounter, LineCarCounter
 
-COUNTER = CentroidCarCounter
+COUNTER = LineCarCounter
 FILENAME = 'videos/rodovia2'
 FILE = f'{FILENAME}.mp4'
 ROI = f'{FILENAME}_roi.json'
@@ -28,11 +28,11 @@ def main():
 
         frame_diff = cv2.absdiff(curr_frame_gray,prev_frame_gray)
 
-        frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel, iterations=3)
-        frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_CLOSE, kernel, iterations=1)
+        #frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_OPEN, kernel, iterations=3)
+        #frame_diff = cv2.morphologyEx(frame_diff, cv2.MORPH_CLOSE, kernel, iterations=1)
         #frame_diff = cv2.dilate(frame_diff, kernel, iterations=1)
 
-        _, fd_th = cv2.threshold(frame_diff, 0, 1, cv2.THRESH_BINARY)
+        _, fd_th = cv2.threshold(frame_diff, 10, 1, cv2.THRESH_BINARY)
 
         cv2.imshow('frame diff',fd_th*255)
 
@@ -47,8 +47,8 @@ def main():
         prev_frame = frame.copy()
         ret, frame = vcap.read()
 
-    cv2.imwrite("bg/fd-frame-" +file + ".png", frame)
-    cv2.imwrite("bg/framediff-" +file +".png", frame_diff)
+    #cv2.imwrite("bg/fd-frame-" +file + ".png", frame)
+    #cv2.imwrite("bg/framediff-" +file +".png", frame_diff)
 
 
 main()

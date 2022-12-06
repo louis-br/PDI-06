@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
-from car_counters import CentroidCarCounter, LineCarCounter
+from car_counters import TrackingCarCounter, LineCarCounter
 
 
-COUNTER = CentroidCarCounter
+COUNTER = TrackingCarCounter
 FILENAME = 'videos/rodovia2'
 FILE = f'{FILENAME}.mp4'
 ROI = f'{FILENAME}_roi.json'
@@ -29,12 +29,12 @@ def main():
         mean = np.mean(frames, axis=0).astype(dtype=np.uint8)
         gray_avg = cv2.cvtColor(mean, cv2.COLOR_RGB2GRAY)
         gray_fr = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        diff = cv2.subtract(gray_fr, gray_avg)
+        diff = cv2.absdiff(gray_fr, gray_avg)
 
         avg_morph = cv2.morphologyEx(diff, cv2.MORPH_ERODE, kernel, iterations=1)
         avg_morph = cv2.morphologyEx(diff, cv2.MORPH_OPEN, kernel, iterations=1)
 
-        _, mean_th = cv2.threshold(avg_morph, 0, 255, cv2.THRESH_BINARY)
+        _, mean_th = cv2.threshold(avg_morph, 20, 1, cv2.THRESH_BINARY)
         cv2.imshow('frame', diff)
         #cv2.imshow('frame', mean_th)
 

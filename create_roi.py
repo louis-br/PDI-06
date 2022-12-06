@@ -1,7 +1,7 @@
 import cv2
 import json
 
-FILENAME = 'videos/rodovia2'
+FILENAME = 'videos/rodovia1'
 FILE = f'{FILENAME}.mp4'
 ROI = f'{FILENAME}_roi.json'
 

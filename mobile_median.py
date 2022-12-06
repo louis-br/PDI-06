@@ -29,12 +29,12 @@ def main():
         median = np.median(frames, axis=0).astype(dtype=np.uint8)
         gray_md = cv2.cvtColor(median, cv2.COLOR_RGB2GRAY)
         gray_fr = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        diff = cv2.subtract(gray_fr, gray_md)
+        diff = cv2.absdiff(gray_fr, gray_md)
 
         med_open = cv2.morphologyEx(diff, cv2.MORPH_ERODE, kernel, iterations=1)
         med_open = cv2.morphologyEx(diff, cv2.MORPH_OPEN, kernel, iterations=1)
 
-        _, median_th = cv2.threshold(med_open, 0, 255, cv2.THRESH_BINARY)
+        _, median_th = cv2.threshold(med_open, 10, 1, cv2.THRESH_BINARY)
         #cv2.imshow('frame', median_th)
         cv2.imshow('frame', diff)
 
