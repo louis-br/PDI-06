@@ -3,12 +3,12 @@ import cv2
 from time import sleep
 from car_counters import TrackingCarCounter, LineCarCounter
 
-COUNTER = LineCarCounter
+COUNTER = TrackingCarCounter
 FILENAME = 'videos/rodovia2'
 FILE = f'{FILENAME}.mp4'
 ROI = f'{FILENAME}_roi.json'
 THRESH = 32
-MHI_DURATION = 5
+MHI_DURATION = 8
 
 
 def mhi():
@@ -24,7 +24,7 @@ def mhi():
     timestamp = 0
     while vcap.isOpened():
         ret, frame = vcap.read()
-        time = float(1/90)
+        time = float(1/30)
         sleep(time)
         if not ret:
             break
