@@ -13,30 +13,36 @@ def main():
     file = 'rodovia2'
     vcap = cv2.VideoCapture('videos/' + file + '.mp4')
     ret, frame = vcap.read()
+    frames=[]
+    frame = cv2.GaussianBlur(frame,(5,5), 0)
+    kernel = np.ones((5,5), np.uint8)
+    atual = 0
 
     #selecionar 25 frames aleatorios no video -> resultado mais "liso"(smooth)
     while True:
-        kernel = np.ones((5,5), np.uint8)
+        if not ret:
+            break
+        prev_frame = frame[:]
+        atual = atual + 1
+        frames.append(prev_frame)
+        ret, frame = vcap.read()
         frame = cv2.GaussianBlur(frame,(5,5), 0)
-        selectframe = vcap.get(cv2.CAP_PROP_FRAME_COUNT) * np.random.uniform(size=25)
-        frames = []
-        for fr in selectframe:
-            vcap.set(cv2.CAP_PROP_POS_FRAMES, fr)
-            ret, frame = vcap.read()
-            frames.append(frame)
-
+        if atual < 5:
+            continue
+        else:
+            frames.pop(0)
 
         mean = np.mean(frames, axis=0).astype(dtype=np.uint8)
         gray_avg = cv2.cvtColor(mean, cv2.COLOR_RGB2GRAY)
         gray_fr = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         diff = cv2.absdiff(gray_fr, gray_avg)
 
-        avg_morph = cv2.morphologyEx(diff, cv2.MORPH_ERODE, kernel, iterations=1)
-        avg_morph = cv2.morphologyEx(diff, cv2.MORPH_OPEN, kernel, iterations=1)
+        avg_morph = cv2.morphologyEx(diff, cv2.MORPH_CLOSE, kernel, iterations=1)
+        avg_morph = cv2.morphologyEx(avg_morph, cv2.MORPH_ERODE, kernel, iterations=1)
 
         _, mean_th = cv2.threshold(avg_morph, 20, 1, cv2.THRESH_BINARY)
-        cv2.imshow('frame', diff)
-        #cv2.imshow('frame', mean_th)
+        #cv2.imshow('frame', diff)
+        cv2.imshow('frame', mean_th*255)
 
         mean_th = np.uint8(mean_th)
 
