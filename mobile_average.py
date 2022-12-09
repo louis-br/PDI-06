@@ -13,6 +13,10 @@ def main():
     file = 'rodovia2'
     vcap = cv2.VideoCapture('videos/' + file + '.mp4')
     ret, frame = vcap.read()
+    width = int(vcap.get(3))
+    height = int(vcap.get(4))
+    size = (width, height)
+    mask = cv2.VideoWriter('bg/avg.avi', cv2.VideoWriter_fourcc(*'MJPG'), 30.0, size)
     frames=[]
     frame = cv2.GaussianBlur(frame,(5,5), 0)
     kernel = np.ones((5,5), np.uint8)
@@ -47,6 +51,9 @@ def main():
         mean_th = np.uint8(mean_th)
 
         counter.update(mean_th)
+
+        avg_convert = cv2.cvtColor(mean_th, cv2.COLOR_GRAY2BGR)
+        mask.write(avg_convert*255)
 
         cv2.imshow('og', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):

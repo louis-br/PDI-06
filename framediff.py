@@ -11,9 +11,11 @@ def main():
     counter = COUNTER(ROI)
     kernel = np.ones((5,5), np.uint8)
     file = 'rodovia2'
-    #abrir o arquivo
     vcap = cv2.VideoCapture('videos/' + file +'.mp4')
-    #bool se arquivo abriu e frame atual
+    width = int(vcap.get(3))
+    height = int(vcap.get(4))
+    size = (width, height)
+    mask = cv2.VideoWriter('bg/fd.avi', cv2.VideoWriter_fourcc(*'MJPG'), 30.0, size)
     ret, frame = vcap.read()
     prev_frame = frame
 
@@ -39,6 +41,9 @@ def main():
         fd_th = np.uint8(fd_th)
 
         counter.update(fd_th)
+
+        fd_convert = cv2.cvtColor(fd_th, cv2.COLOR_GRAY2BGR)
+        mask.write(fd_convert*255)
 
         cv2.imshow('og', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):

@@ -17,6 +17,10 @@ def mhi():
     kernel = np.ones((3,3), np.uint8)
     vcap = cv2.VideoCapture(FILE)
     ret, frame = vcap.read()
+    width = int(vcap.get(3))
+    height = int(vcap.get(4))
+    size = (width, height)
+    mask = cv2.VideoWriter('bg/mhi.avi', cv2.VideoWriter_fourcc(*'MJPG'), 30.0, size)
     h, w = frame.shape[:2]
     print(h, w)
     prev_frame = frame.copy()
@@ -45,6 +49,9 @@ def mhi():
         mh2 = np.uint8(mh2)
 
         counter.update(mh2)
+
+        mhi_convert = cv2.cvtColor(mh2, cv2.COLOR_GRAY2BGR)
+        mask.write(mhi_convert*255)
 
         prev_frame = frame.copy()
         #frame = cv2.line(frame, (1, 200), (599, 200), (255,0,0), 1)

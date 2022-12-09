@@ -7,22 +7,16 @@ FILENAME = 'videos/rodovia2'
 FILE = f'{FILENAME}.mp4'
 ROI = f'{FILENAME}_roi.json'
 
-def mediancalc(vcap, atual):
-    selectframe = vcap.get(cv2.CAP_PROP_FRAME_COUNT) * (np.random.uniform(low=atual-5.0, high=atual,size=5))
-    frames = []
-    for fr in selectframe:
-        vcap.set(cv2.CAP_PROP_POS_FRAMES, fr)
-        ret, frame = vcap.read()
-        frames.append(frame)
-    median = np.median(frames, axis=0).astype(dtype=np.uint8)
-    return median
-
 def main():
     counter = COUNTER(ROI)
     kernel = np.ones((5,5), np.uint8)
     file = 'rodovia2'
     vcap = cv2.VideoCapture('videos/' + file + '.mp4')
     ret, frame = vcap.read()
+    width = int(vcap.get(3))
+    height = int(vcap.get(4))
+    size = (width, height)
+    mask = cv2.VideoWriter('bg/median.avi', cv2.VideoWriter_fourcc(*'MJPG'), 30.0, size)
     atual = 0
     frames = []
     frame = cv2.GaussianBlur(frame,(5,5), cv2.BORDER_DEFAULT)
@@ -55,10 +49,14 @@ def main():
 
         counter.update(median_th)
 
+        median_convert = cv2.cvtColor(median_th, cv2.COLOR_GRAY2RGB)
+        mask.write(median_convert*255)
         cv2.imshow('og', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
     cv2.imwrite('bg/median-' + file + '.png', median)
+    mask.release()
+    vcap.release()
 main()
 
