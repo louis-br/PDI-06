@@ -10,8 +10,7 @@ ROI = f'{FILENAME}_roi.json'
 def main():
     counter = COUNTER(ROI)
     kernel = np.ones((5,5), np.uint8)
-    file = 'rodovia2'
-    vcap = cv2.VideoCapture('videos/' + file +'.mp4')
+    vcap = cv2.VideoCapture(FILE)
     width = int(vcap.get(3))
     height = int(vcap.get(4))
     size = (width, height)
@@ -52,8 +51,8 @@ def main():
         prev_frame = frame.copy()
         ret, frame = vcap.read()
 
-    #cv2.imwrite("bg/fd-frame-" +file + ".png", frame)
-    #cv2.imwrite("bg/framediff-" +file +".png", frame_diff)
+    #cv2.imwrite("bg/fd-frame-" +FILE + ".png", frame)
+    #cv2.imwrite("bg/framediff-" +FILE +".png", frame_diff)
 
 
 main()

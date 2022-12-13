@@ -60,7 +60,7 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-    cv2.imwrite('bg/mean-' + file + '.png', mean)
+    cv2.imwrite('bg/mean-' + FILENAME + '.png', mean)
     mask.release()
     vcap.release()
 main()

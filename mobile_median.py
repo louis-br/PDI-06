@@ -56,7 +56,7 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
-    cv2.imwrite('bg/median-' + file + '.png', median)
+    cv2.imwrite('bg/median-' + FILENAME + '.png', median)
     mask.release()
     vcap.release()
 main()
