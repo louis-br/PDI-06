@@ -12,6 +12,8 @@ def main():
     counter = COUNTER(ROI)
     vcap = cv2.VideoCapture(FILE)
     ret, frame = vcap.read()
+    if not ret:
+        return
     width = int(vcap.get(3))
     height = int(vcap.get(4))
     size = (width, height)
@@ -23,12 +25,12 @@ def main():
 
     #selecionar 25 frames aleatorios no video -> resultado mais "liso"(smooth)
     while True:
-        if not ret:
-            break
         prev_frame = frame[:]
         atual = atual + 1
         frames.append(prev_frame)
         ret, frame = vcap.read()
+        if not ret:
+            break
         frame = cv2.GaussianBlur(frame,(5,5), 0)
         if atual < 5:
             continue

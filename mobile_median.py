@@ -12,6 +12,8 @@ def main():
     kernel = np.ones((5,5), np.uint8)
     vcap = cv2.VideoCapture(FILE)
     ret, frame = vcap.read()
+    if not ret:
+        return
     width = int(vcap.get(3))
     height = int(vcap.get(4))
     size = (width, height)
@@ -20,12 +22,12 @@ def main():
     frames = []
     frame = cv2.GaussianBlur(frame,(5,5), cv2.BORDER_DEFAULT)
     while True:
-        if not ret:
-            break
         prev_frame = frame[:]
         atual = atual + 1
         frames.append(prev_frame)
         ret, frame = vcap.read()
+        if not ret:
+            break
         frame = cv2.GaussianBlur(frame,(5,5), cv2.BORDER_DEFAULT)
         if atual < 5:
             continue
