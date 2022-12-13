@@ -60,5 +60,7 @@ def main():
                 break
 
     cv2.imwrite('bg/mean-' + file + '.png', mean)
+    mask.release()
+    vcap.release()
 main()
 

@@ -59,6 +59,8 @@ def mhi():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+    mask.release()
+    vcap.release()
     cv2.destroyAllWindows()
 
 mhi()
