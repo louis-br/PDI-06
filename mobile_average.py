@@ -10,8 +10,7 @@ ROI = f'{FILENAME}_roi.json'
 
 def main():
     counter = COUNTER(ROI)
-    file = 'rodovia2'
-    vcap = cv2.VideoCapture('videos/' + file + '.mp4')
+    vcap = cv2.VideoCapture(FILE)
     ret, frame = vcap.read()
     width = int(vcap.get(3))
     height = int(vcap.get(4))
