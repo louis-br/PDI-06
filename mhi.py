@@ -33,15 +33,15 @@ def mhi():
         if not ret:
             break
         frame_diff = cv2.absdiff(frame, prev_frame)
-        gray_diff = cv2.cvtColor(frame_diff, cv2.COLOR_BGR2GRAY)
-        gauss = cv2.GaussianBlur(gray_diff,(3,3), cv2.BORDER_DEFAULT)
+        gray_framediff = cv2.cvtColor(frame_diff, cv2.COLOR_BGR2GRAY)
+        gauss = cv2.GaussianBlur(gray_framediff,(3,3), cv2.BORDER_DEFAULT)
         ret, fgmask = cv2.threshold(gauss, THRESH, 1, cv2.THRESH_BINARY)
         timestamp += 1
 
-        # update motion history
+        # update mhi layers
         cv2.motempl.updateMotionHistory(fgmask, motion_history, timestamp, MHI_DURATION)
 
-        # normalize motion history
+        # normalize mhi layers
         mh = np.clip((motion_history - (timestamp - MHI_DURATION)) / MHI_DURATION, 0, 1)
         _, mh2 = cv2.threshold(mh, 0, 1, cv2.THRESH_BINARY)
         cv2.imshow('motion-history', mh2*255)
